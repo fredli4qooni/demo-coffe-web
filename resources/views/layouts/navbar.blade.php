@@ -33,9 +33,19 @@
             @guest
                 <a href="{{ route('login') }}" class="text-neutral-700 hover:text-amber-700 font-medium">Login</a>
             @else
-                <a href="{{ route('dashboard') }}" class="text-neutral-700 hover:text-amber-700 font-medium">
-                    {{ Auth::user()->name }}
-                </a>
+                <div class="flex items-center gap-4">
+                    <a href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('dashboard') }}" 
+                       class="text-neutral-700 hover:text-amber-700 font-bold">
+                        Hi, {{ Auth::user()->name }}
+                    </a>
+
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-xs bg-red-50 text-red-600 border border-red-200 px-3 py-1.5 rounded-full hover:bg-red-600 hover:text-white transition">
+                            Logout
+                        </button>
+                    </form>
+                </div>
             @endguest
 
         </div>
