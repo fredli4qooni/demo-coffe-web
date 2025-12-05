@@ -1,9 +1,21 @@
-{{-- resources/views/home.blade.php --}}
 @extends('layouts.user')
 
 @section('content')
 
-{{-- HERO SECTION --}}
+@if(session('success'))
+    <div class="max-w-6xl mx-auto px-4 mt-6 mb-12"> 
+        <div class="bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg flex justify-between items-center shadow-sm">
+            <div>
+                <strong class="font-bold">Berhasil!</strong>
+                <span class="block sm:inline ml-1">{{ session('success') }}</span>
+            </div>
+            <a href="{{ route('cart.index') }}" class="bg-green-600 text-white text-sm px-4 py-2 rounded-full hover:bg-green-700 transition">
+                Lihat Keranjang →
+            </a>
+        </div>
+    </div>
+@endif
+
 <section class="mb-20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div>
@@ -30,7 +42,6 @@
 </section>
 
 
-{{-- ⭐ BEST SELLER SECTION --}}
 <section class="mb-20">
     <h2 class="text-3xl font-bold mb-6 text-amber-700">Best Seller</h2>
 
@@ -39,7 +50,6 @@
         @foreach ($best_sellers as $product)
             <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-xl transition group flex flex-col">
 
-                {{-- GAMBAR --}}
                 <div class="relative">
                     <img src="{{ asset($product->image) }}"
                          class="h-48 w-full object-cover group-hover:scale-105 transition duration-300">
@@ -49,7 +59,6 @@
                     </span>
                 </div>
 
-                {{-- DETAIL --}}
                 <div class="p-4 flex flex-col flex-grow">
 
                     <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
@@ -64,10 +73,10 @@
                            Lihat Detail
                         </a>
 
-                        <button
-                            class="bg-black text-white py-2 rounded-full text-sm hover:bg-amber-700 transition">
+                        <a href="{{ route('cart.add', $product->id) }}"
+                            class="bg-black text-white py-2 rounded-full text-center text-sm hover:bg-amber-700 transition cursor-pointer">
                             Tambah ke Keranjang
-                        </button>
+                        </a>
                     </div>
 
                 </div>

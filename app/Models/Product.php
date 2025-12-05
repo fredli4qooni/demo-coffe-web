@@ -23,15 +23,6 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function show($id)
-{
-    $product = Product::with('category')->findOrFail($id);
-
-    return view('products.show', compact('product'));
-}
-
-
-    // Akses harga dalam format rupiah (opsional, buat di Blade lebih enak)
     public function getFormattedPriceAttribute()
     {
         return 'Rp ' . number_format($this->price, 0, ',', '.');

@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\CartController;
+
 use App\Models\Product;
 
 /*
@@ -24,6 +27,11 @@ Route::get('/menu', [ProductController::class, 'index'])
 // DETAIL PRODUK
 Route::get('/product/{id}', [ProductController::class, 'show'])
     ->name('product.show');
+
+// CART PAGE
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/add-to-cart/{id}', [CartController::class, 'addToCart'])->name('cart.add');
+Route::delete('/remove-from-cart', [CartController::class, 'remove'])->name('cart.remove');
 
 // ABOUT PAGE
 Route::get('/about', function () {
@@ -52,6 +60,16 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+/*
+|--------------------------------------------------------------------------
+| ADMIN ROUTES
+|--------------------------------------------------------------------------
+*/
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    
+    Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+});
 
 /*
 |--------------------------------------------------------------------------

@@ -1,68 +1,68 @@
 @extends('layouts.app')
 
 @section('content')
+    @php
+        use Illuminate\Support\Str;
+    @endphp
 
-@php
-    use Illuminate\Support\Str;
-@endphp
+    @if (session('success'))
+        <div
+            class="mb-6 bg-green-100 border border-green-400 text-green-800 px-4 py-3 rounded-lg flex justify-between items-center shadow-sm">
+            <div>
+                <strong class="font-bold">Berhasil!</strong>
+                <span class="ml-1">{{ session('success') }}</span>
+            </div>
+            <a href="{{ route('cart.index') }}" class="underline font-bold hover:text-green-900">Lihat Keranjang</a>
+        </div>
+    @endif
+    
+    <h1 class="text-3xl font-bold mb-8">Menu Kami</h1>
 
-<h1 class="text-3xl font-bold mb-8">Menu Kami</h1>
+    @foreach ($categories as $category)
+        <h2 class="text-2xl font-semibold mb-4 text-amber-700">{{ $category->name }}</h2>
 
-@foreach ($categories as $category)
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
 
-    {{-- NAMA KATEGORI --}}
-    <h2 class="text-2xl font-semibold mb-4 text-amber-700">{{ $category->name }}</h2>
+            @foreach ($category->products as $product)
+                <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-xl transition group flex flex-col">
 
-    {{-- GRID PRODUK --}}
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-12">
+                    <div class="relative">
+                        <img src="{{ asset($product->image) }}"
+                            class="h-48 w-full object-cover group-hover:scale-105 transition duration-300"
+                            alt="{{ $product->name }}">
 
-        @foreach ($category->products as $product)
-            <div class="bg-white shadow rounded-xl overflow-hidden hover:shadow-xl transition group flex flex-col">
+                        <span class="absolute top-2 right-2 bg-black text-white text-xs py-1 px-3 rounded-full shadow">
+                            {{ $product->formatted_price }}
+                        </span>
+                    </div>
 
-                {{-- GAMBAR PRODUK --}}
-                <div class="relative">
-                    <img src="{{ asset($product->image) }}"
-                         class="h-48 w-full object-cover group-hover:scale-105 transition duration-300"
-                         alt="{{ $product->name }}">
+                    <div class="p-4 flex flex-col flex-grow">
 
-                    <span class="absolute top-2 right-2 bg-black text-white text-xs py-1 px-3 rounded-full shadow">
-                        {{ $product->formatted_price }}
-                    </span>
-                </div>
+                        <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
 
-                {{-- BAGIAN DETAIL --}}
-                <div class="p-4 flex flex-col flex-grow">
+                        <p class="text-neutral-500 text-sm mb-4">
+                            {{ Str::limit($product->description, 60) }}
+                        </p>
 
-                    <h3 class="text-lg font-semibold">{{ $product->name }}</h3>
+                        <div class="flex flex-col gap-2 mt-auto">
 
-                    <p class="text-neutral-500 text-sm mb-4">
-                        {{ Str::limit($product->description, 60) }}
-                    </p>
+                            <a href="{{ route('product.show', $product->id) }}"
+                                class="bg-amber-600 text-white py-2 rounded-full text-center text-sm hover:bg-amber-700 transition">
+                                Lihat Detail
+                            </a>
 
-                    {{-- BUTTON DETAIL + BUTTON KERANJANG --}}
-                    <div class="flex flex-col gap-2 mt-auto">
+                            <a href="{{ route('cart.add', $product->id) }}"
+                                class="bg-black text-white py-2 rounded-full text-center text-sm hover:bg-amber-700 transition cursor-pointer">
+                                Tambah ke Keranjang
+                            </a>
 
-                        {{-- LIHAT DETAIL --}}
-                        <a href="{{ route('product.show', $product->id) }}"
-                           class="bg-amber-600 text-white py-2 rounded-full text-center text-sm hover:bg-amber-700 transition">
-                            Lihat Detail
-                        </a>
-
-                        {{-- TAMBAH KERANJANG --}}
-                        <button
-                            class="bg-black text-white py-2 rounded-full text-sm hover:bg-amber-700 transition">
-                            Tambah ke Keranjang
-                        </button>
+                        </div>
 
                     </div>
 
                 </div>
+            @endforeach
 
-            </div>
-        @endforeach
-
-    </div>
-
-@endforeach
-
+        </div>
+    @endforeach
 @endsection
